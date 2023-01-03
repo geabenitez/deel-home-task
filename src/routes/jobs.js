@@ -22,6 +22,8 @@ router.get('/unpaid', async (req, res) => {
       paid: null
     }
   })
+
+  // Return jobs
   res.json(jobs)
 })
 
