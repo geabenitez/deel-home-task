@@ -7,16 +7,15 @@ app.use(bodyParser.json());
 app.set('sequelize', sequelize)
 app.set('models', sequelize.models)
 
-/**
- * @returns contract by id
- */
-app.get('/contracts/:id', getProfile, async (req, res) => {
-    const { Contract } = req.app.get('models')
-    const { id } = req.params
-    const contract = await Contract.findOne({
-        where: { id, ClientId: req.profile.id }
-    })
-    if (!contract) return res.status(404).send('Contract not found')
-    res.json(contract)
-})
+// import routes
+const contractRoutes = require('./routes/contracts')
+const jobsRoutes = require('./routes/jobs')
+
+// use middleware to get profile
+app.use(getProfile)
+
+// use contract routes
+app.use('/contracts', contractRoutes)
+app.use('/jobs', jobsRoutes)
+
 module.exports = app;
