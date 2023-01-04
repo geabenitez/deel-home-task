@@ -10,6 +10,7 @@ app.set('models', sequelize.models)
 // import routes
 const contractRoutes = require('./routes/contracts')
 const jobsRoutes = require('./routes/jobs')
+const adminRoutes = require('./routes/admin')
 
 // use middleware to get profile
 app.use(getProfile)
@@ -17,5 +18,6 @@ app.use(getProfile)
 // use contract routes
 app.use('/contracts', contractRoutes)
 app.use('/jobs', jobsRoutes)
+app.use('/admin', adminRoutes)
 
 module.exports = app;
