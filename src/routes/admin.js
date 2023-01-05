@@ -8,7 +8,6 @@ const Sequelize = require('sequelize');
  */
 router.get('/best-profession', async (req, res) => {
   const { Contract, Job, Profile } = req.app.get('models')
-
   // Validates start and end query params
   if (!req.query.start || !req.query.end) {
     return res.status(400).send('Missing start or end query param')
@@ -40,7 +39,7 @@ router.get('/best-profession', async (req, res) => {
     }]
   })
 
-  // Get the top profession
+  // Get the sum of the professions
   const topProfession = jobs.reduce((acc, job) => {
     const profession = job.Contract.Contractor.profession
     if (!acc[profession]) {
@@ -51,7 +50,19 @@ router.get('/best-profession', async (req, res) => {
   }, {})
 
   // Return the top profession
-  return res.json(topProfession)
+  const topList = []
+  for (const key in topProfession) {
+    topList.push({
+      profession: key,
+      paid: topProfession[key]
+    })
+  }
+
+  return res.json(topList.sort((a, b) => {
+    if (a.paid < b.paid) return 1
+    if (a.paid > b.paid) return -1
+    return 0
+  })[0])
 })
 
 /**
