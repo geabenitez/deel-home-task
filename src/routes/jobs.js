@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { Contract, Job, Profile, sequelize } = req.app.get('models')
 
 /**
  * @returns all unpaid jobs for a profile id for active contracts
  */
 router.get('/unpaid', async (req, res) => {
+  const { Contract, Job } = req.app.get('models')
 
   // Get all contract ids for a profile id and status in_progress
   const contractIds = (await Contract.findAll({
@@ -31,6 +31,7 @@ router.get('/unpaid', async (req, res) => {
  * Pay for a job, a client can only pay if his balance >= the amount to pay.
  */
 router.post('/:job_id/pay', async (req, res) => {
+  const { Contract, Job, Profile, sequelize } = req.app.get('models')
 
   // Get unpaid job by id and return 404 if job not found
   const job = await Job.findOne({ where: { id: req.params.job_id, paid: null } })
